@@ -6,6 +6,7 @@ import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
 import ru.netology.page.VerificationPage;
 
+import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransferSteps {
@@ -13,27 +14,34 @@ public class TransferSteps {
     VerificationPage verifyPage;
     DashboardPage dashboard;
 
-    @Пусть("открыта страница с формой авторизации {string}")
+    @Пусть("пользователь залогинен с именем {string} и паролем {string}")
+    public void auth(String login, String password) {
+        open("http://localhost:9999/");
+        loginPage = new LoginPage();
+        var verifyPage = loginPage.validLogin(login, password);
+    }
+
+    /*@Пусть("открыта страница с формой авторизации {string}")
     public void openAuthPage(String url) {
-        loginPage = Selenide.open(url, LoginPage.class);
+        loginPage = open(url, LoginPage.class);
     }
 
 
     @Когда("пользователь пытается авторизоваться с именем {string} и паролем {string}")
     public void loginWithNameAndPassword(String login, String password) {
         verifyPage = loginPage.validLogin(login, password);
-    }
+    }*/
 
     @И("c проверочным кодом {string}")
     public void setValidCode(String verifyCode) {
+        verifyPage = new VerificationPage();
         dashboard = verifyPage.verify(verifyCode);
     }
 
-    @Когда("Когда пользователь переводит {string} рублей с карты с номером {string} на свою {int} карту с главной страницы")
+    @Когда("пользователь переводит {string} рублей с карты с номером {string} на свою {int} карту с главной страницы")
     public void successTransfer(String amount, String cardFrom, int indexCardTo) {
         var transferPage = dashboard.transferClick(indexCardTo - 1);
         transferPage.importTransferData(amount, cardFrom);
-        //dashboard = transferPage.checkNotification(hidden);
     }
 
     @Тогда("баланс его {string} карты из списка на главной странице должен стать {string} рублей")

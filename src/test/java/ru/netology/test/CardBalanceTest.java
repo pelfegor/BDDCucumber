@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = {"pretty", "summary"},
-        features = {"src/test/resources/Transfer.feature"},
-        glue = {"ru.netology.cucmberSteps"})
+        features = {"src/test/resources"},
+        glue = {"ru.netology.cucumberSteps"})
 public class CardBalanceTest {
 }
